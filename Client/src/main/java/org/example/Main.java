@@ -23,19 +23,26 @@ public class Main {
         try {
             // Conversion du troisième argument en entier
             groupCount = Integer.parseInt(args[2]);
+
+            // Affichage des paramètres pour vérification
+            System.out.println("Fichier des victimes : " + victimFile);
+            System.out.println("Fichier des messages : " + messageFile);
+            System.out.println("Nombre de groupes : " + groupCount);
+
+            //TODO SMTP CLIENT
+            for (String email : victimFile) {
+                System.out.println(email);
+            }
+
             if (groupCount <= 0) {
                 throw new NumberFormatException("Le nombre de groupes doit être supérieur à 0.");
             }
         } catch (NumberFormatException e) {
             System.err.println("Erreur : <groupCount> doit être un entier positif.");
             System.exit(1);
-            return; // Ajouté pour que le compilateur comprenne que groupCount est défini
         }
 
-        // Affichage des paramètres pour vérification
-        System.out.println("Fichier des victimes : " + victimFile);
-        System.out.println("Fichier des messages : " + messageFile);
-        System.out.println("Nombre de groupes : " + groupCount);
+
     }
 
     public static List<String> EmailParser(String victimsPath){
