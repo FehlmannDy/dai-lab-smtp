@@ -9,6 +9,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
+
+    static int SERVER_PORT = 1025;
+    static String SERVER_ADDRESS = "localhost";
+
     public static void main(String[] args) {
         if (args.length != 3) {
             System.err.println("Usage: java -jar smtpclient-*.jar <victimFile> <messageFile> <groupCount>");
@@ -29,7 +33,7 @@ public class Main {
             System.out.println("Fichier des messages : " + messageFile);
             System.out.println("Nombre de groupes : " + groupCount);
 
-            //TODO SMTP CLIENT
+            //TODO USE mailhandler
             for (String email : victimFile) {
                 System.out.println(email);
             }
