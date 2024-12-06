@@ -3,6 +3,7 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,6 +37,12 @@ public class Main {
             //TODO USE mailhandler
             for (String email : victimFile) {
                 System.out.println(email);
+                try(Socket socket = new Socket(SERVER_ADDRESS,SERVER_PORT);) {
+                    MailHandler mailHandler = new MailHandler(socket,new MailWorker(new Mail(email,victimFile.toArray(new String[0]),messageFile.getFirst())));
+                    mailHandler.run();
+                }catch (IOException e) {
+                    System.err.println("Erreur de connexion des mails : " + e.getMessage());
+                }
             }
 
             if (groupCount <= 0) {
