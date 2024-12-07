@@ -14,6 +14,10 @@ public enum SmtpStatus {
      */
     OK("250"),
     /**
+     * Variant of accept message from the client
+     */
+    ACCEPT("250 Accepted"),
+    /**
      * The server is unable to send the e-mail
      */
     START_MAIL_INPUT("354");

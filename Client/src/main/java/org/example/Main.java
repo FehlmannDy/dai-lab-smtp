@@ -29,19 +29,29 @@ public class Main {
             // Conversion du troisième argument en entier
             groupCount = Integer.parseInt(args[2]);
 
+            List<List<String>> groups = splitIntoGroups(victimFile, groupCount);
+
             // Affichage des paramètres pour vérification
-            System.out.println("Fichier des victimes : " + victimFile);
-            System.out.println("Fichier des messages : " + messageFile);
+            System.out.println("Fichier des victimes : " + args[0]);
+            System.out.println("Fichier des messages : " + args[1]);
             System.out.println("Nombre de groupes : " + groupCount);
 
             //TODO USE mailhandler
-            for (String email : victimFile) {
-                System.out.println(email);
-                try(Socket socket = new Socket(SERVER_ADDRESS,SERVER_PORT);) {
-                    MailHandler mailHandler = new MailHandler(socket,new MailWorker(new Mail(email,victimFile.toArray(new String[0]),messageFile.getFirst())));
-                    mailHandler.run();
-                }catch (IOException e) {
-                    System.err.println("Erreur de connexion des mails : " + e.getMessage());
+            for (List<String> group : groups) {
+                System.out.println("Envoi au groupe : " + group);
+
+                // Prendre un message (le retirer pour qu'il ne soit pas réutilisé)
+                String message = messageFile.isEmpty() ? "Default Message" : messageFile.removeFirst();
+
+                // Créer et envoyer l'e-mail pour chaque groupe
+                for (String email : group) {
+                    try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+                        Mail mail = new Mail(email, group.toArray(new String[0]), message);
+                        MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
+                        mailHandler.run();
+                    } catch (IOException e) {
+                        System.err.println("Erreur de connexion des mails : " + e.getMessage());
+                    }
                 }
             }
 
@@ -56,17 +66,26 @@ public class Main {
 
     }
 
-    public static List<String> EmailParser(String victimsPath){
+    public static List<List<String>> splitIntoGroups(List<String> emails, int groupSize) {
+        List<List<String>> groups = new ArrayList<>();
+        for (int i = 0; i < emails.size(); i += groupSize) {
+            groups.add(emails.subList(i, Math.min(i + groupSize, emails.size())));
+        }
+        return groups;
+    }
+
+    public static List<String> EmailParser(String victimsPath) {
         // La liste pour stocker les emails valides
         List<String> validEmails = new ArrayList<>();
 
-        // Expression régulière pour valider les emails
-        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        // Expression régulière pour valider les emails (renforcée)
+        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         Pattern pattern = Pattern.compile(emailRegex);
 
         try (BufferedReader br = new BufferedReader(new FileReader(victimsPath))) {
             String line;
             while ((line = br.readLine()) != null) {
+                line = line.trim(); // Supprime les espaces autour
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.matches()) {
                     validEmails.add(line); // Ajout à la liste si l'email est valide
@@ -78,6 +97,7 @@ public class Main {
             return null;
         }
     }
+
 
     public static List<String> MessageParser(String messagesPath){
         List<String> messages = new ArrayList<>();

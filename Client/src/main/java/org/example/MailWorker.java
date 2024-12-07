@@ -59,25 +59,25 @@ public class MailWorker {
     }
 
     private SmtpCommand processOkResponse(String request, SmtpCommand nextCommand) {
-        if (!request.startsWith(SmtpStatus.OK.code()))
+        if (!request.startsWith(SmtpStatus.OK.code()) & !request.startsWith(SmtpStatus.ACCEPT.code()))
             throw new IllegalStateException("Unexpected response: " + request);
         return nextCommand;
     }
 
     private SmtpCommand processRecipient(String request) {
-        if (!request.startsWith(SmtpStatus.OK.code()))
+        if (!request.startsWith(SmtpStatus.OK.code()) & !request.startsWith(SmtpStatus.ACCEPT.code()))
             throw new IllegalStateException("Unexpected response: " + request);
         return (++currentRecipientIndex < mail.receivers().length) ? SmtpCommand.RCPT : SmtpCommand.DATA;
     }
 
     private SmtpCommand processStartMailInput(String request) {
-        if (!request.startsWith(SmtpStatus.START_MAIL_INPUT.code()))
+        if (!request.startsWith(SmtpStatus.START_MAIL_INPUT.code()) & !request.startsWith(SmtpStatus.ACCEPT.code()))
             throw new IllegalStateException("Unexpected response: " + request);
         return SmtpCommand.MESSAGE;
     }
 
     private SmtpCommand processServiceClosing(String request) {
-        if (!request.startsWith(SmtpStatus.SERVICE_CLOSING.code()))
+        if (!request.startsWith(SmtpStatus.SERVICE_CLOSING.code()) & !request.startsWith(SmtpStatus.ACCEPT.code()))
             throw new IllegalStateException("Unexpected response: " + request);
         return SmtpCommand.QUIT;
     }
