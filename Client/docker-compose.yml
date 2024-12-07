@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  maildev:
+    image: maildev/maildev:latest
+    container_name: maildev
+    ports:
+      - "1080:1080" # Web interface
+      - "1025:1025" # SMTP server
+    restart: unless-stopped
