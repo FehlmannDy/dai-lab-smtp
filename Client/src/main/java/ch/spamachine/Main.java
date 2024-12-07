@@ -58,7 +58,7 @@ public class Main {
             System.out.println("Messages file : " + args[1]);
             System.out.println("Number of groups : " + groupCount);
 
-            //TODO USE mailhandler
+
             for (List<String> group : groups) {
                 System.out.println("Send to this group : " + group);
 
