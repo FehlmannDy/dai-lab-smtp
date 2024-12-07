@@ -26,7 +26,7 @@ public class MailHandler implements Runnable {
             String line;
             while ((line = in.readLine()) != null && mailWorker.getCurrentCommand() != QUIT) {
                 String response = mailWorker.work(line);
-                if(response.isEmpty()) {
+                if(!response.isEmpty()) {
                     out.write(response);
                     out.flush();
                 }
