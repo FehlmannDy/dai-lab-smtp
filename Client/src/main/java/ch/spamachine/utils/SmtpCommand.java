@@ -1,4 +1,4 @@
-package org.example.utils;
+package ch.spamachine.utils;
 
 public enum SmtpCommand {
     /**

@@ -1,4 +1,4 @@
-package org.example;
+package ch.spamachine;
 
 /**
  * The {@code Mail} record represents an email with a sender, recipients, and a message.
