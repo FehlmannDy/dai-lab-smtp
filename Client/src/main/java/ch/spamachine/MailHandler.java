@@ -1,11 +1,11 @@
-package org.example;
+package ch.spamachine;
 
 import java.io.*;
 import java.net.Socket;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 // ---Custom import---
-import static org.example.utils.SmtpCommand.QUIT;
+import static ch.spamachine.utils.SmtpCommand.QUIT;
 
 /**
  * MailHandler class handles the communication between the client and the SMTP server.

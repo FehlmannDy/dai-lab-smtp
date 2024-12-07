@@ -1,4 +1,4 @@
-package org.example;
+package ch.spamachine;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,7 +18,13 @@ public class Main {
 
     static int SERVER_PORT = 1025;
     static String SERVER_ADDRESS = "localhost";
-    static String WELCOME_MESSAGE = "Welcome to the SPAMACHINE !";
+    static String WELCOME_MESSAGE = " ######  ########     ###    ##     ##    ###     ######  ##     ## #### ##    ## ######## \n" +
+            "##    ## ##     ##   ## ##   ###   ###   ## ##   ##    ## ##     ##  ##  ###   ## ##       \n" +
+            "##       ##     ##  ##   ##  #### ####  ##   ##  ##       ##     ##  ##  ####  ## ##       \n" +
+            " ######  ########  ##     ## ## ### ## ##     ## ##       #########  ##  ## ## ## ######   \n" +
+            "      ## ##        ######### ##     ## ######### ##       ##     ##  ##  ##  #### ##       \n" +
+            "##    ## ##        ##     ## ##     ## ##     ## ##    ## ##     ##  ##  ##   ### ##       \n" +
+            " ######  ##        ##     ## ##     ## ##     ##  ######  ##     ## #### ##    ## ######## \n";
 
     /**
      * Main entry point of the program. It parses command-line arguments and sends emails to victims in specified groups.
@@ -48,13 +54,13 @@ public class Main {
             List<List<String>> groups = splitIntoGroups(victimFile, groupCount);
 
             // Affichage des paramètres pour vérification
-            System.out.println("Fichier des victimes : " + args[0]);
-            System.out.println("Fichier des messages : " + args[1]);
-            System.out.println("Nombre de groupes : " + groupCount);
+            System.out.println("Victims file : " + args[0]);
+            System.out.println("Messages file : " + args[1]);
+            System.out.println("Number of groups : " + groupCount);
 
             //TODO USE mailhandler
             for (List<String> group : groups) {
-                System.out.println("Envoi au groupe : " + group);
+                System.out.println("Send to this group : " + group);
 
                 // Prendre un message (le retirer pour qu'il ne soit pas réutilisé)
                 String message = messageFile.isEmpty() ? "Default Message" : messageFile.removeFirst();
@@ -66,16 +72,16 @@ public class Main {
                         MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
                         mailHandler.run();
                     } catch (IOException e) {
-                        System.err.println("Erreur de connexion des mails : " + e.getMessage());
+                        System.err.println("Error mail connection : " + e.getMessage());
                     }
                 }
             }
 
             if (groupCount <= 0) {
-                throw new NumberFormatException("Le nombre de groupes doit être supérieur à 0.");
+                throw new NumberFormatException("Group need to be more than 0.");
             }
         } catch (NumberFormatException e) {
-            System.err.println("Erreur : <groupCount> doit être un entier positif.");
+            System.err.println("Error : <groupCount> need to be a positive number.");
             System.exit(1);
         }
 

@@ -1,7 +1,7 @@
-package org.example;
+package ch.spamachine;
 
-import org.example.utils.SmtpCommand;
-import org.example.utils.SmtpStatus;
+import ch.spamachine.utils.SmtpCommand;
+import ch.spamachine.utils.SmtpStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Base64;
