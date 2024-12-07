@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>270</y>
+      <w>220</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Mail
+Package::
+--
+- sender: String
+- receivers: String[]
+- message: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>270</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>MailHandler
+Package::
+--
+- socket: Socket
+- mailWorker: MailWorker
+--
++ run(): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>250</y>
+      <w>360</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>MailWorker
+Package::
+--
+- mail: Mail
+- currentCommand: SmtpCommand
+- currentRecipientIndex: int
+--
++ work(message: String): String 
++ analyzeRequest(request: String)
++ generateResponse(): String </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>740</y>
+      <w>710</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Main
+Package::
+--
+- SERVER_PORT: int
+- SERVER_ADDRESS: String
+- WELCOME_MESSAGE: String
+--
++ main(args: String[]): void
++ splitIntoGroups(emails: List&lt;String&gt;, groupSize: int): List&lt;List&lt;String&gt;&gt;
++ EmailParser(victimsPath: String): List&lt;String&gt;
++ MessageParser(messagesPath: String): List&lt;String&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>550</y>
+      <w>220</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>SmtpCommand
+Package::utils
+--
+- EHLO
+- MAIL
+- RCPT
+- DATA
+- QUIT</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1030</x>
+      <y>550</y>
+      <w>220</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>SmtpStatus
+Package::utils
+--
+- OK
+- SERVICE_READY
+- ACCEPT
+- SERVICE_CLOSING</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>370</x>
+      <y>390</y>
+      <w>110</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; Create</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>390</y>
+      <w>200</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; Create</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>300</y>
+      <w>320</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; Handle conversation</panel_attributes>
+    <additional_attributes>300.0;30.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>430</y>
+      <w>120</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;120.0;100.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1020</x>
+      <y>430</y>
+      <w>120</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>100.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
