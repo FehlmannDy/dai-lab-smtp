@@ -6,11 +6,11 @@
     <coordinates>
       <x>0</x>
       <y>270</y>
-      <w>220</w>
+      <w>250</w>
       <h>130</h>
     </coordinates>
     <panel_attributes>Mail
-Package::
+Package::ch.spamachine
 --
 - sender: String
 - receivers: String[]
@@ -26,7 +26,7 @@ Package::
       <h>130</h>
     </coordinates>
     <panel_attributes>MailHandler
-Package::
+Package::ch.spamachine
 --
 - socket: Socket
 - mailWorker: MailWorker
@@ -43,7 +43,7 @@ Package::
       <h>190</h>
     </coordinates>
     <panel_attributes>MailWorker
-Package::
+Package::ch.spamachine
 --
 - mail: Mail
 - currentCommand: SmtpCommand
@@ -63,7 +63,7 @@ Package::
       <h>210</h>
     </coordinates>
     <panel_attributes>Main
-Package::
+Package::ch.spamachine
 --
 - SERVER_PORT: int
 - SERVER_ADDRESS: String
@@ -78,13 +78,13 @@ Package::
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>750</x>
+      <x>700</x>
       <y>550</y>
-      <w>220</w>
+      <w>270</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>SmtpCommand
-Package::utils
+Package::ch.spamachine.utils
 --
 - EHLO
 - MAIL
@@ -96,13 +96,13 @@ Package::utils
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1030</x>
+      <x>1000</x>
       <y>550</y>
-      <w>220</w>
+      <w>270</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>SmtpStatus
-Package::utils
+Package::ch.spamachine.utils
 --
 - OK
 - SERVICE_READY
@@ -149,25 +149,25 @@ Package::utils
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>880</x>
+      <x>830</x>
       <y>430</y>
-      <w>120</w>
+      <w>170</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 </panel_attributes>
-    <additional_attributes>10.0;120.0;100.0;10.0</additional_attributes>
+    <additional_attributes>10.0;120.0;150.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1020</x>
       <y>430</y>
-      <w>120</w>
+      <w>140</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 </panel_attributes>
-    <additional_attributes>100.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>120.0;120.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
