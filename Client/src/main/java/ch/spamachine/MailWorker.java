@@ -123,7 +123,7 @@ public class MailWorker {
      * Processes the start of the mail input and transitions to the message command.
      */
     private SmtpCommand processStartMailInput(String request) {
-        if (!request.startsWith(SmtpStatus.START_MAIL_INPUT.code()) & !request.startsWith(SmtpStatus.ACCEPT.code()))
+        if (!request.startsWith(SmtpStatus.START_MAIL_INPUT.code()) & !request.startsWith(SmtpStatus.OK.code()))
             throw new IllegalStateException("Unexpected response: " + request);
         return SmtpCommand.MESSAGE;
     }
