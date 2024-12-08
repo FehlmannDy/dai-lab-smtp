@@ -90,8 +90,6 @@ The program is divided into several modules, each responsible for specific tasks
 
 ## Program Output
 
-### MailDev SMTP Server
-
 ### Program Demo Output
 ![Diagramme des classes](./Client/Rendu/demo-screenshot.png)
 
