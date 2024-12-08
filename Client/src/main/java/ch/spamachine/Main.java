@@ -43,6 +43,13 @@ public class Main {
         }
 
         List<String> victimFile = EmailParser(args[0]);
+
+        // Verify that the victim file is not empty
+        if (victimFile.isEmpty()) {
+            System.err.println("Error: The victim file is empty. No prank emails can be sent.");
+            return;
+        }
+
         List<String> messageFile = MessageParser(args[1]);
         int groupCount;
 
@@ -53,6 +60,13 @@ public class Main {
             groupCount = Integer.parseInt(args[2]);
 
             List<List<String>> groups = splitIntoGroups(victimFile, groupCount);
+
+            // Verify that there are enough victims to form the requested number of groups
+            if (groups.isEmpty()) {
+                System.err.println("Error: Not enough victims to form the requested number of groups. " +
+                        "Please reduce the number of groups or provide more victims.");
+                return;
+            }
 
             // Print the parameters for verification
             System.out.println("Victims file : " + args[0]);
@@ -65,18 +79,19 @@ public class Main {
                 System.out.println("Sending prank email(s) to group number : " + (groups.indexOf(group) + 1) + "...");
 
                 // Take a message (remove it so it's not reused)
-                String message = messageFile.isEmpty() ? "Default Message" : messageFile.removeFirst();
+                String message = messageFile.isEmpty() ? "I may be a prank email :)" : messageFile.removeFirst();
 
                 // Create and send the email for each group
                 for (String email : group) {
                     try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
 
-                        // Get a random sender from the group that is not the current recipient
+                        // Get a random sender from the victims that is not the current recipient
                         String sender;
                         do {
-                            sender = group.get(new Random().nextInt(group.size()));
+                            sender = victimFile.get(new Random().nextInt(victimFile.size()));
                         } while (sender.equals(email));
-                        Mail mail = new Mail(email, new String[]{email}, message);
+
+                        Mail mail = new Mail(sender, new String[]{email}, message);
                         MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
                         mailHandler.run();
                     } catch (IOException e) {
