@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +19,8 @@ public class Main {
 
     static int SERVER_PORT = 1025;
     static String SERVER_ADDRESS = "localhost";
-    static String WELCOME_MESSAGE = " ######  ########     ###    ##     ##    ###     ######  ##     ## #### ##    ## ######## \n" +
+    static String WELCOME_MESSAGE =
+            " ######  ########     ###    ##     ##    ###     ######  ##     ## #### ##    ## ######## \n" +
             "##    ## ##     ##   ## ##   ###   ###   ## ##   ##    ## ##     ##  ##  ###   ## ##       \n" +
             "##       ##     ##  ##   ##  #### ####  ##   ##  ##       ##     ##  ##  ####  ## ##       \n" +
             " ######  ########  ##     ## ## ### ## ##     ## ##       #########  ##  ## ## ## ######   \n" +
@@ -36,11 +38,10 @@ public class Main {
      */
     public static void main(String[] args) {
         if (args.length != 3) {
-            System.err.println("Usage: java -jar smtpclient-*.jar <victimFile> <messageFile> <groupCount>");
+            System.err.println("Usage: java -jar Client-*.jar <victimFile> <messageFile> <groupCount>");
             System.exit(1);
         }
 
-        // Récupération des arguments
         List<String> victimFile = EmailParser(args[0]);
         List<String> messageFile = MessageParser(args[1]);
         int groupCount;
@@ -48,40 +49,54 @@ public class Main {
         try {
             System.out.println(WELCOME_MESSAGE);
 
-            // Conversion du troisième argument en entier
+            // Conversion of the third argument to an integer (number of groups)
             groupCount = Integer.parseInt(args[2]);
 
             List<List<String>> groups = splitIntoGroups(victimFile, groupCount);
 
-            // Affichage des paramètres pour vérification
+            // Print the parameters for verification
             System.out.println("Victims file : " + args[0]);
             System.out.println("Messages file : " + args[1]);
-            System.out.println("Number of groups : " + groupCount);
+            System.out.println("Number of groups : " + groups.size());
+            System.out.println("Number of victims by group : " + groupCount + "\n");
 
 
             for (List<String> group : groups) {
-                System.out.println("Send to this group : " + group);
+                System.out.println("Sending prank email(s) to group number : " + (groups.indexOf(group) + 1) + "...");
 
-                // Prendre un message (le retirer pour qu'il ne soit pas réutilisé)
+                // Take a message (remove it so it's not reused)
                 String message = messageFile.isEmpty() ? "Default Message" : messageFile.removeFirst();
 
-                // Créer et envoyer l'e-mail pour chaque groupe
+                // Create and send the email for each group
                 for (String email : group) {
                     try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
-                        Mail mail = new Mail(email, group.toArray(new String[0]), message);
+
+                        // Get a random sender from the group that is not the current recipient
+                        String sender;
+                        do {
+                            sender = group.get(new Random().nextInt(group.size()));
+                        } while (sender.equals(email));
+                        Mail mail = new Mail(email, new String[]{email}, message);
                         MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
                         mailHandler.run();
                     } catch (IOException e) {
                         System.err.println("Error mail connection : " + e.getMessage());
                     }
                 }
+
+                System.out.println("Prank email(s) sent to the following victim(s) : " + group);
             }
 
+            System.out.println("\nAll prank emails have been sent successfully ! Thanks for using the SPAMACHINE !");
+
             if (groupCount <= 0) {
-                throw new NumberFormatException("Group need to be more than 0.");
+                throw new NumberFormatException("Group size needs to be at least 1.");
             }
         } catch (NumberFormatException e) {
             System.err.println("Error : <groupCount> need to be a positive number.");
+            System.exit(1);
+        } catch (Exception e) {
+            System.err.println("Error : " + e.getMessage());
             System.exit(1);
         }
 
@@ -110,25 +125,26 @@ public class Main {
      * @return A list of valid email addresses.
      */
     public static List<String> EmailParser(String victimsPath) {
-        // La liste pour stocker les emails valides
+
+        // The list to store valid emails
         List<String> validEmails = new ArrayList<>();
 
-        // Expression régulière pour valider les emails (renforcée)
+        // Regex to validate emails (reinforced)
         String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         Pattern pattern = Pattern.compile(emailRegex);
 
         try (BufferedReader br = new BufferedReader(new FileReader(victimsPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                line = line.trim(); // Supprime les espaces autour
+                line = line.trim(); // Remove spaces around
                 Matcher matcher = pattern.matcher(line);
                 if (matcher.matches()) {
-                    validEmails.add(line); // Ajout à la liste si l'email est valide
+                    validEmails.add(line); // Add the email to the list if it is valid
                 }
             }
             return validEmails;
         } catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            System.err.println("Error reading the file : " + e.getMessage());
             return null;
         }
     }
@@ -149,7 +165,7 @@ public class Main {
             }
             return messages;
         } catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            System.err.println("Error reading the file : " + e.getMessage());
             return null;
         }
     }
