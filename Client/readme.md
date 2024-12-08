@@ -71,7 +71,7 @@ The program is divided into several modules, each responsible for specific tasks
 - Define the commands and expected server responses for the SMTP protocol.
 
 
-![Diagramme des classes](./SmtpClassDiagram.jpg)
+![Diagramme des classes](./Client/Rendu/SmtpClassDiagram.jpg)
 
 
 ## How It Works
@@ -88,6 +88,25 @@ The program is divided into several modules, each responsible for specific tasks
 - If an unexpected server response is received, the program attempts to exit with a QUIT command.
 
 
-## Screenshots
+## Program Output
+
+### MailDev SMTP Server
+
+### Program Demo Output
+![Diagramme des classes](./Client/Rendu/demo-screenshot.png)
+
+In the screenshot above, the program sends prank emails to 5 groups of victims. We choosed to have groups of 2 victims but as we only have 9 victims, the last group has only one victim (handled by the program). The program sends a prank email to each victim, with the sender displayed being a random victim from the entire list.
+
+### MailDev Web Interface Output
+![Diagramme des classes](./Client/Rendu/maildev-demo-screenshot.png)
+
+In the screenshot above, the MailDev web interface shows the prank emails received by the victims. Each email is displayed with the sender, recipient, and message content. The email content is a random prank message from the input file.
+
+### Empty File Handling
+![Diagramme des classes](./Client/Rendu/emptyfile-screenshot.png)
+
+In the screenshot above, the program handles an empty victim file by displaying an error message and exiting.
+
+
 
 
