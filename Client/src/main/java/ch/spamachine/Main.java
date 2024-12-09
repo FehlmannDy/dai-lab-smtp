@@ -1,9 +1,8 @@
 package ch.spamachine;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -76,30 +75,26 @@ public class Main {
 
 
             for (List<String> group : groups) {
-                System.out.println("Sending prank email(s) to group number : " + (groups.indexOf(group) + 1) + "...");
+                System.out.println("Sending prank email to group number : " + (groups.indexOf(group) + 1) + "...");
 
-                // Take a message (remove it so it's not reused)
                 String message = messageFile.isEmpty() ? "I may be a prank email :)" : messageFile.removeFirst();
 
-                // Create and send the email for each group
-                for (String email : group) {
-                    try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+                String sender;
+                do {
+                    sender = victimFile.get(new Random().nextInt(victimFile.size()));
+                } while (group.contains(sender));
 
-                        // Get a random sender from the victims that is not the current recipient
-                        String sender;
-                        do {
-                            sender = victimFile.get(new Random().nextInt(victimFile.size()));
-                        } while (sender.equals(email));
+                String[] recipients = group.toArray(new String[0]);
 
-                        Mail mail = new Mail(sender, new String[]{email}, message);
-                        MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
-                        mailHandler.run();
-                    } catch (IOException e) {
-                        System.err.println("Error mail connection : " + e.getMessage());
-                    }
+                try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+                    Mail mail = new Mail(sender, recipients, message);
+                    MailHandler mailHandler = new MailHandler(socket, new MailWorker(mail));
+                    mailHandler.run();
+                } catch (IOException e) {
+                    System.err.println("Error mail connection : " + e.getMessage());
                 }
-
             }
+
 
             System.out.println("\nAll prank emails have been sent successfully ! Thanks for using the SPAMACHINE !");
 
@@ -147,7 +142,9 @@ public class Main {
         String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
         Pattern pattern = Pattern.compile(emailRegex);
 
-        try (BufferedReader br = new BufferedReader(new FileReader(victimsPath))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(victimsPath), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim(); // Remove spaces around
@@ -165,14 +162,15 @@ public class Main {
 
     /**
      * Parses the messages from the given message file.
-     *
      * @param messagesPath The path to the file containing the messages.
      * @return A list of message strings.
      */
     public static List<String> MessageParser(String messagesPath) {
         List<String> messages = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(messagesPath))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(messagesPath), StandardCharsets.UTF_8)))  {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
