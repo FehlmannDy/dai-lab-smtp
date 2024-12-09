@@ -170,18 +170,21 @@ public class Main {
      * @param messagesPath The path to the file containing the messages.
      * @return A list of message strings.
      */
-    public static List<String> MessageParser(String messagesPath){
+    public static List<String> MessageParser(String messagesPath) {
         List<String> messages = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(messagesPath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                messages.add(line);
+                line = line.trim();
+                if (!line.isEmpty()) {
+                    messages.add(line);
+                }
             }
-            return messages;
         } catch (IOException e) {
             System.err.println("Error reading the file : " + e.getMessage());
-            return null;
         }
+        return messages;
     }
+
 }
