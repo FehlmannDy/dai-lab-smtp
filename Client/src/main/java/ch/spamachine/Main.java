@@ -99,7 +99,6 @@ public class Main {
                     }
                 }
 
-                System.out.println("Prank email(s) sent to the following victim(s) : " + group);
             }
 
             System.out.println("\nAll prank emails have been sent successfully ! Thanks for using the SPAMACHINE !");
