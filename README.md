@@ -15,38 +15,81 @@
 
  ## Description
 
-Develop a client application that automatically plays e-mail pranks on a list of victims.
+SPAMACHINE is a Java client application designed to send prank emails to groups of victims. It uses a fake SMTP server (MailDev) to simulate email sending to victims and prank messages are loaded from input files.
 
-Usage :
-
-```bash
-java -jar Client-*.jar <victimFile> <messageFile> <groupCount>
-```
-
----
 
 ## Setup the lab environment
 
 First init the docker compose file
 
-This is the [MailDev](https://github.com/maildev/maildev) fake SMTP server
+[MailDev](https://github.com/maildev/maildev) is a fake SMTP server for testing emails. Pull its Docker image using:
 
 ```bash
-docker compose start
+docker pull maildev/maildev:latest
 ```
 
-You can build the project with [Maven](https://maven.apache.org/index.html) by the pom.xml file
+Init the docker compose file
+
+```bash
+docker compose up -d
+```
+
+You can build the project with [Maven](https://maven.apache.org/index.html) using the pom.xml file
 ```bash
 mvn -f Client/pom.xml clean package
 ```
 
-You can run the spamachine with this following command
+You can run the SPAMACHINE with the following command:
 
 ```bash
-java -jar Client-1.0-SNAPSHOT.jar <victimFile> <messageFile> <groupCount>
+java -jar Client/target/Client-1.0-SNAPSHOT.jar <victimFile> <messageFile> <groupCount>
 ```
 
 ---
+
+## Input File Structures and Validation
+
+To run the SPAMACHINE correctly, you need two input files:
+
+- A victim email file (.txt)
+- A prank message file (.txt)
+
+These files must follow specific formats to ensure the program processes them correctly.
+
+### 1. Victim Email File (victims.txt)
+
+The victim file contains a list of email addresses, with each email address on a separate line.
+
+#### Requirements:
+- Only valid email addresses are accepted (validated with regex).
+- Invalid or improperly formatted email addresses will be ignored.
+- Can have blank lines between
+
+#### Example Structure:
+```bash
+john.doe@example.com 
+jane_doe123@domain.org 
+
+user@sub.domain.co.uk 
+admin@company.io 
+contact@service.com
+```
+
+### 2. Prank Message File (messages.txt)
+
+The message file contains the messages to be sent as emails. 
+
+#### Requirements:
+- Email subject and body must be on the same line.
+- Can have blank lines between
+
+#### Example Structure:
+Congratulations! You’ve won a brand-new iPhone 14! Click here to claim your prize: http://fakeprize.com
+
+Dear user, your account has been compromised. Verify your details immediately via this link: http://phishing-link.com
+
+Work from home and earn $5000 per week with zero effort. Sign up now!
+Unusual activity detected in your bank account. Confirm your details here: http://fakebank.com
 
 ## Implementation
 
